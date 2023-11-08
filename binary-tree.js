@@ -38,33 +38,28 @@ class BinaryTreeNode {
   /** maxDepth(): return the maximum depth from the invoking node -- that is,
    * the length of the longest path from the invoking node to a leaf. */
   maxDepth() {
-    let currentDepth = 0;
-    let maxDepth = 0;
-    let branchResetCounter = 0;
-    let toVisitStack = [this];
+    const leftDepth = this.left ? this.left.maxDepth() : 0;
+    const rightDepth = this.right ? this.right.maxDepth() : 0;
 
-    while (toVisitStack.length > 0) {
-      let current = toVisitStack.pop();
-      currentDepth += 1;
-
-      if (current.left === null && current.right === null) {
-        maxDepth = Math.max(maxDepth, currentDepth);
-        branchResetCounter += 1;
-        currentDepth = branchResetCounter;
-      }
-
-      if (current.left !== null) toVisitStack.push(current.left);
-      if (current.right !== null) toVisitStack.push(current.right);
-    }
-
-    return maxDepth;
+    // depth = 1 (for us) + larger of left or right path
+    return Math.max(
+      leftDepth,
+      rightDepth
+    ) + 1;
   }
 
   /** minDepth(): return the minimum depth from the invoking node -- that is,
    * the length of the shortest path from the invoking node to a leaf. */
   minDepth() {
+    const leftMin = this.left ? this.left.minDepth() : 0;
+    const rightMin = this.right ? this.right.minDepth() : 0;
 
-  }
+    // depth = 1 (for us) + larger of left or right path
+
+    if (leftMin === 0 && rightMin === 0) return 1
+    else return Math.min(leftMin, rightMin) + 1;
+
+}
 
   /** nextLarger(lowerBound): return the smallest value from the invoking node
    * that is larger than lowerBound. Return null if no such value exists. */
@@ -97,7 +92,8 @@ class BinaryTree {
   // this is a stack or recursion problem; we'll use recursion
 
   maxDepth() {
-
+    if (this.root === null) return 0;
+    return this.root.maxDepth();
   }
 
   /** minDepth(): return the minimum depth of the tree -- that is,
@@ -106,7 +102,8 @@ class BinaryTree {
   // this is a stack or recursion problem; we'll use recursion
 
   minDepth() {
-
+    if (this.root === null) return 0;
+    return this.root.minDepth();
   }
 
   /** nextLarger(lowerBound): return the smallest value in the tree
